@@ -9,5 +9,8 @@ WORKDIR /opt/app
 
 COPY ${artifact} app.jar
 
+# Expose port 3000
+EXPOSE 3000
+
 # This should not be changed
 ENTRYPOINT ["java","-jar","app.jar"]
