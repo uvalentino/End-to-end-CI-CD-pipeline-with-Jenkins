@@ -48,9 +48,20 @@ pipeline {
     stage('Run Docker Container') {
       steps {
         script {
+          def containerName = "my-app-container"
           def dockerImage = "uvalentino/ultimate-cicd:${BUILD_NUMBER}"
+
+          // Stop and remove the existing container if it exists
           sh """
-            docker run -d --name my-app-container -p 9090:8080 ${dockerImage}
+            if [ \$(docker ps -q -f name=${containerName}) ]; then
+              docker stop ${containerName}
+              docker rm ${containerName}
+            fi
+          """
+
+          // Run the new container
+          sh """
+            docker run -d --name ${containerName} -p 9090:8080 ${dockerImage}
           """
         }
       }
