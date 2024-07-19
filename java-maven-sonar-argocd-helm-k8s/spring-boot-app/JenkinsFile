@@ -32,6 +32,7 @@ pipeline {
     stage('Build and Push Docker Image') {
       environment {
         DOCKER_IMAGE = "uvalentino/ultimate-cicd:${BUILD_NUMBER}"
+        // DOCKERFILE_LOCATION = "java-maven-sonar-argocd-helm-k8s/spring-boot-app/Dockerfile"
         REGISTRY_CREDENTIALS = credentials('docker-cred')
       }
       steps {
@@ -43,44 +44,6 @@ pipeline {
             }
         }
       }
-    }
-    stage('Cleanup Old Containers') {
-      steps {
-        sh 'docker container prune -f --filter "name=my-new*"'
-      }
-    }
-    stage('Run Docker Container') {
-      steps {
-        script {
-          def dockerImage = "uvalentino/ultimate-cicd:${BUILD_NUMBER}"
-          def containerName = "my-new-${BUILD_NUMBER}"
-          sh """
-            docker run --rm -d \
-              --name ${containerName} \
-              -p 3000:3000 \
-              ${dockerImage}
-          """
-        }
-      }
-    }
-    stage('Update Deployment File') {
-        environment {
-            GIT_REPO_NAME = "End-to-end-CI-CD-pipeline-with-Jenkins"
-            GIT_USER_NAME = "uvalentino"
-        }
-        steps {
-            withCredentials([string(credentialsId: 'github', variable: 'GITHUB_TOKEN')]) {
-                sh '''
-                    git config user.email "ubeujumv@gmail.com"
-                    git config user.name "Ubeujum Valentino"
-                    BUILD_NUMBER=${BUILD_NUMBER}
-                    sed -i "s/replaceImageTag/${BUILD_NUMBER}/g" java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
-                    git add java-maven-sonar-argocd-helm-k8s/spring-boot-app-manifests/deployment.yml
-                    git commit -m "Update deployment image to version ${BUILD_NUMBER}"
-                    git push https://${GITHUB_TOKEN}@github.com/${GIT_USER_NAME}/${GIT_REPO_NAME} HEAD:main
-                '''
-            }
-        }
     }
   }
 }
