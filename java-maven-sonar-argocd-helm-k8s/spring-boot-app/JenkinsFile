@@ -50,8 +50,8 @@ pipeline {
           def dockerImage = "uvalentino/ultimate-cicd:${BUILD_NUMBER}"
           sh """
             docker run --rm -d \
-              --name my-app-container-new \
-              -p 8085:8080 \
+              --name my-new \
+              -p 3000:3000 \
               ${dockerImage}
           """
         }
