@@ -9,7 +9,7 @@ pipeline {
     stage('Checkout') {
       steps {
         sh 'echo passed'
-        //git branch: 'main', url: 'https://github.com/uvalentino/Jenkins-Zero-To-Hero.git'
+        //git branch: 'main', url: 'https://github.com/uvalentino/End-to-end-CI-CD-pipeline-with-Jenkins'
       }
     }
     stage('Build and Test') {
@@ -47,7 +47,7 @@ pipeline {
     }
     stage('Update Deployment File') {
         environment {
-            GIT_REPO_NAME = "Jenkins-Zero-To-Hero"
+            GIT_REPO_NAME = "End-to-end-CI-CD-pipeline-with-Jenkins"
             GIT_USER_NAME = "uvalentino"
         }
         steps {
