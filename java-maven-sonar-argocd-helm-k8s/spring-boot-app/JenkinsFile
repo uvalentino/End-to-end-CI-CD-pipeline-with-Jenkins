@@ -44,13 +44,19 @@ pipeline {
         }
       }
     }
+    stage('Cleanup Old Containers') {
+      steps {
+        sh 'docker container prune -f --filter "name=my-new*"'
+      }
+    }
     stage('Run Docker Container') {
       steps {
         script {
           def dockerImage = "uvalentino/ultimate-cicd:${BUILD_NUMBER}"
+          def containerName = "my-new-${BUILD_NUMBER}"
           sh """
             docker run --rm -d \
-              --name my-new \
+              --name ${containerName} \
               -p 3000:3000 \
               ${dockerImage}
           """
