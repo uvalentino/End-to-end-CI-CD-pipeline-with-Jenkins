@@ -10,7 +10,7 @@ pipeline {
       steps {
         sh 'echo passed'
         // Uncomment the following line to enable source code checkout
-        // git branch: 'main', url: 'https://github.com/uvalentino/End-to-end-CI-CD-pipeline-with-Jenkins.git'
+        git branch: 'main', url: 'https://github.com/uvalentino/End-to-end-CI-CD-pipeline-with-Jenkins.git'
       }
     }
     stage('Build and Test') {
